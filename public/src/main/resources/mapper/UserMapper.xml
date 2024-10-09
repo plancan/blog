@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.UserMapper">
+<!--    查询登陆用户的一些信息-->
+    <select id="login" resultType="com.domain.User" parameterType="com.domain.User">
+        select u.id,u.password,u.identity,u.name from user u where u.id=#{id} or u.email=#{email};
+    </select>
+<!--    添加新用户-->
+    <insert id="addUser" parameterType="com.domain.User">
+        insert into user (name,password,sex,birthday,identity,introduction,avatar,email)
+        values (#{name},#{password},#{sex},#{birthday},#{identity},#{introduction},#{avatar},#{email});
+    </insert>
+<!--    根据邮箱号来查询id-->
+    <select id="getIdByEmail" parameterType="String" resultType="String">
+        select id from user where email=#{email};
+    </select>
+<!--    查询用户的关注列表id-->
+    <select id="getUserFollow" parameterType="int" resultType="com.domain.User">
+     select id,name,avatar,introduction from user where id in(select follow_uid from follow where uid=#{id});
+    </select>
+<!--    查询用户的头像-->
+    <select id="getAvatar" resultType="String" parameterType="int">
+        select avatar from user where id=#{id};
+    </select>
+<!--    更新用户头像-->
+    <update id="updateAvatar" parameterType="String">
+        update user set avatar =#{avatar}
+    </update>
+<!--    查询用户背景图-->
+    <select id="getSpace" parameterType="int" resultType="String">
+        select space_picture where id=#{id};
+    </select>
+<!--    更新用户背景图-->
+    <select id="updateSpace" parameterType="String">
+        update user set space_picture=${space};
+    </select>
+<!--    查看用户是否关注了某人-->
+    <select id="getFollow" resultType="Integer">
+        select id from follow where uid=#{uid} and follow_uid=#{followId}
+    </select>
+<!--    取消关注-->
+    <delete id="cancelFollow" parameterType="int">
+        delete from follow where id=#{id}
+    </delete>
+<!--    进行关注-->
+    <insert id="toFollow" >
+        insert into follow (uid,follow_uid) values (#{uid},#{followId})
+    </insert>
+</mapper>

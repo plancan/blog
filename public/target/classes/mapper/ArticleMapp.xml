@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ArticleMapper">
+
+    <!--    查询一篇文章-->
+    <select id="getArticle" parameterType="int" resultType="com.domain.Article">
+        select a.*
+        from article a
+        where a.id = #{ id} ;
+    </select>
+
+    <!--    添加文章-->
+    <insert id="addArticle" parameterType="com.domain.Article" useGeneratedKeys="true" keyProperty="id">
+        insert into article (uid, title, content, view, create_time, comment,cover,original,html_content)
+        values (#{uid}, #{title}, #{content}, #{view}, #{createTime}, #{comment},#{cover},#{original},#{htmlContent});
+    </insert>
+    <!--  为文章添加图片  -->
+    <insert id="addPictures" parameterType="com.domain.Article">
+        insert into article_pictures (article_id,picture) values
+        <foreach collection="pictures" item="item" separator=",">
+            (#{id},#{item})
+        </foreach>
+    </insert>
+    <!--    为文章添加标签-->
+    <insert id="addLabels" parameterType="com.domain.Article">
+        insert into article_label (article_id,label_id,label) values
+        <foreach collection="labels" item="item" separator=",">
+            (#{id},#{item.labelId},#{item.label})
+        </foreach>
+    </insert>
+    <!--    查询用户的收藏列表-->
+    <select id="getCollection" parameterType="int" resultType="com.domain.Article">
+        select id, title, summary, uid,cover
+        from article
+        where id in (select article_id
+                     from collection
+                     where uid = #{id})
+    </select>
+    <!--    获得所有文章id-->
+    <select id="getAllArticleId" resultType="String">
+        select id
+        from article;
+    </select>
+<!--    删除文章的所有图片-->
+    <delete id="deletePictures" parameterType="int">
+        delete from article_pictures where article_id=#{articleId};
+    </delete>
+<!--    更新文章-->
+    <update id="updateArticle" parameterType="com.domain.Article">
+        update  article set title=#{title}, content=#{content},html_content=#{htmlContent}, view=#{view}, comment=#{comment}, update_time=#{updateTime},cover=#{cover} where id=#{id}
+    </update>
+</mapper>

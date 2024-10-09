@@ -1,0 +1,9 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.CommentMapper">
+    <insert id="addComment" parameterType="com.domain.Comment" useGeneratedKeys="true" keyProperty="id">
+        insert into comment (article_id,commentators_id,content,create_time) values (#{articleId},#{commentatorsId}
+        ,#{content},#{createTime})
+    </insert>
+</mapper>

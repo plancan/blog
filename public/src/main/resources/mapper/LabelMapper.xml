@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.LabelMapper">
+    <select id="getLabels" parameterType="int" resultType="com.domain.Label">
+        select label_id, label
+        from article_label
+        where article_id = #{articleId};
+    </select>
+    <select id="getLabelArticles" parameterType="int" resultType="String">
+        select article_id
+        from article_label
+        where label_id = #{labelId};
+    </select>
+    <select id="getLabelByid" parameterType="list" resultType="com.domain.Label">
+        select label_id,label from label
+        <where>
+            <foreach collection="list" separator="," item="item" open="label_id in (" close=")">
+                #{item.labelId}
+            </foreach>
+        </where>
+    </select>
+    <delete id="deleteLabels" parameterType="int">
+        delete from article_label where article_id =#{articleId}
+    </delete>
+</mapper>

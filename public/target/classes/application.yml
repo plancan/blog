@@ -1,0 +1,56 @@
+
+server:
+  port: 8081
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 1 #任务调度线程池大小，默认1
+      thread-name-prefix: ssm_
+      shutdown:
+        await-termination: false #线程池关闭时等待所有任务完成
+        await-termination-period: 10s #调度线程关闭前最大等待时间，确保最后一定关闭
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    druid:
+      url: jdbc:mysql://172.17.0.6:3306/blog?useUnicode=true&characterEncoding=utf-8
+#      url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8
+      username: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      password: 123456
+  mail:
+    username: 188149357@qq.com
+    host: smtp.qq.com
+    password: vxkbqlalksphbidd
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+  redis:
+    host: 172.17.0.5
+    port: 6379
+    password: 26z.
+#    host: localhost
+#    port: 6379
+
+#    password: 26z.
+
+  security:
+    user:
+      name: hao
+      password: 123
+mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+  mapper-locations: classpath*:/mapper/**/*.xml
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true
